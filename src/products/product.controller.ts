@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post, Body } from '@nestjs/common';
 import { ProductService } from './product.service';
+import { CreateProductDto } from './dtos/createProduct.dto';
 
 @Controller('products')
 export class ProductController {
@@ -20,5 +21,10 @@ export class ProductController {
     const response = this.productService.getProductById(id);
     console.log('This is from /:id', response);
     return response;
+  }
+
+  @Post('/')
+  createProduct(@Body() product: CreateProductDto) {
+    return this.productService.createProduct(product);
   }
 }

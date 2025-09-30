@@ -1,21 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { min } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
+import { CreateProductDto } from './dtos/createProduct.dto';
 
 @Injectable()
 export class ProductService {
   private products = [
     {
-      id: 1,
+      id: uuidv4(),
       name: 'product 001',
       price: 10,
     },
     {
-      id: 2,
+      id: uuidv4(),
       name: 'product 002',
       price: 20,
     },
     {
-      id: 3,
+      id: uuidv4(),
       name: 'product 003',
       price: 30,
     },
@@ -26,7 +27,7 @@ export class ProductService {
   }
 
   getProductById(id: string) {
-    const product = this.products.find((product) => product.id === Number(id));
+    const product = this.products.find((product) => product.id === id);
     if (!product) {
       throw new NotFoundException(`The product with ${id} is not found!`);
     }
@@ -46,5 +47,15 @@ export class ProductService {
     }
 
     return productsPrice;
+  }
+
+  createProduct(product: CreateProductDto) {
+    const newProduct = {
+      id: uuidv4(),
+      ...product,
+    };
+
+    this.products.push(newProduct);
+    return newProduct;
   }
 }
