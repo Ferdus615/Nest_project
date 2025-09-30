@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ProductService } from './product.service';
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
   @Get('/')
@@ -9,15 +9,16 @@ export class ProductController {
     return this.productService.getAllProduct();
   }
 
+  @Get('/search')
+  findProductByPrice(@Query('minPrice') minPrice: string) {
+    console.log('This is form /search', minPrice);
+    return this.productService.findProductByPrice(minPrice);
+  }
+
   @Get('/:id')
   getProductById(@Param('id') id: string) {
     const response = this.productService.getProductById(id);
-    console.log(response);
+    console.log('This is from /:id', response);
     return response;
-  }
-
-  @Get('/search')
-  getProductByPrice(@Query('minPrice') minPrice: string) {
-    return this.productService.getProductByPrice(minPrice);
   }
 }

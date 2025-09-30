@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { min } from 'rxjs';
 
 @Injectable()
 export class ProductService {
@@ -29,5 +30,21 @@ export class ProductService {
     if (!product) {
       throw new NotFoundException(`The product with ${id} is not found!`);
     }
+
+    return product;
+  }
+
+  findProductByPrice(minPrice: string) {
+    console.log(minPrice);
+    const productsPrice = this.products.filter(
+      (product) => product.price >= Number(minPrice),
+    );
+    if (!productsPrice.length) {
+      throw new NotFoundException(
+        `There is no product above ${minPrice} price range!`,
+      );
+    }
+
+    return productsPrice;
   }
 }
