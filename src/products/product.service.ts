@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateProductDto } from './dtos/createProduct.dto';
+import { UpdateProductDto } from './dtos/updateProduct.dto';
 
 @Injectable()
 export class ProductService {
@@ -57,5 +58,31 @@ export class ProductService {
 
     this.products.push(newProduct);
     return newProduct;
+  }
+
+  updateProduct(id: string, updateProductDto: UpdateProductDto) {
+    const product = this.products.find((product) => product.id === id);
+    if (!product) {
+      throw new NotFoundException(
+        `The product with the id:${id} is not found!`,
+      );
+    }
+
+    if (updateProductDto.name) product.name = updateProductDto.name;
+    if (updateProductDto.price) product.price = updateProductDto.price;
+
+    return product;
+  }
+
+  deleteProduct(id: string) {
+    const product = this.products.filter((poduct) => product.id !== id);
+
+    if (!product) {
+      throw new NotFoundException(
+        `The product with the id:${id} id not found!`,
+      );
+    }
+
+    return product;
   }
 }
